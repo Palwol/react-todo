@@ -2,7 +2,7 @@ import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { categoryList, IToDo, toDoState } from "../atoms";
-import check from "../check_image.png";
+import check from "../checkImage.png";
 
 const Todo = styled.li`
   display: flex;
