@@ -2,7 +2,6 @@ import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { categoryList, IToDo, toDoState } from "../atoms";
-import check from "../checkImage.png";
 
 const Todo = styled.li`
   display: flex;
@@ -22,9 +21,9 @@ const CategorySelector = styled.select`
   outline: none;
 `;
 
-const CheckImg = styled.img`
-  width: 10px;
-  height: 10px;
+const Check = styled.span`
+  font-size: 12px;
+  color: ${(props) => props.theme.accentColor};
   margin-right: 5px;
 `;
 
@@ -45,7 +44,7 @@ function ToDo({ text, category, id }: IToDo) {
   };
   return (
     <Todo>
-      <CheckImg src={check} alt="check" />
+      <Check>✔︎</Check>
       <span>{text}</span>
       <CategorySelector value={category} onInput={onInput}>
         {cateList.map(
