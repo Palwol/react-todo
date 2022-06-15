@@ -1,69 +1,63 @@
-import { useSetRecoilState } from "recoil";
+import React from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { Categories, IToDo, toDoState } from "../atoms";
+import { categoryList, IToDo, toDoState } from "../atoms";
+import check from "../check_image.png";
 
-const TodoList = styled.li`
+const Todo = styled.li`
   display: flex;
   align-items: center;
   margin: 5px 0px;
   font-size: 15px;
 `;
 
-const TodoBtn = styled.button`
-  font-size: 10px;
-  border-radius: 10px;
-  border: 1.3px solid ${(props) => props.theme.textColor};
+const CategorySelector = styled.select`
+  width: 80px;
+  padding: 1px;
+  font-size: 12px;
   background-color: transparent;
+  border: 1px solid ${(props) => props.theme.accentColor};
   color: ${(props) => props.theme.textColor};
-  padding: 3px 5px;
   margin-left: 5px;
-  &:hover {
-    cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.2);
-  }
+  outline: none;
+`;
+
+const CheckImg = styled.img`
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
 `;
 
 function ToDo({ text, category, id }: IToDo) {
-  const setToDos = useSetRecoilState(toDoState);
-  const onClick = (newCategory: Categories) => {
-    setToDos((curr) => {
-      const targetIndex = curr.findIndex((el) => el.id === id);
-      const newTodo = { text, id, category: newCategory };
-      return [
-        ...curr.slice(0, targetIndex),
-        newTodo,
-        ...curr.slice(targetIndex + 1),
-      ];
-    });
+  const [toDos, setToDos] = useRecoilState(toDoState);
+  const cateList = useRecoilValue(categoryList);
+  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
+    const targetIndex = toDos.findIndex((el) => el.id === id);
+    const { value } = event.currentTarget;
+    const newTodo = { text, id, category: value };
+    const newToDos = [
+      ...toDos.slice(0, targetIndex),
+      newTodo,
+      ...toDos.slice(targetIndex + 1),
+    ];
+    setToDos(newToDos);
+    localStorage.setItem("toDos", JSON.stringify(newToDos));
   };
   return (
-    <TodoList>
+    <Todo>
+      <CheckImg src={check} alt="check" />
       <span>{text}</span>
-      {category !== Categories.TO_DO && (
-        <TodoBtn
-          onClick={() => onClick(Categories.TO_DO)}
-          name={Categories.TO_DO}
-        >
-          To Do
-        </TodoBtn>
-      )}
-      {category !== Categories.DOING && (
-        <TodoBtn
-          onClick={() => onClick(Categories.DOING)}
-          name={Categories.DOING}
-        >
-          Doing
-        </TodoBtn>
-      )}
-      {category !== Categories.DONE && (
-        <TodoBtn
-          onClick={() => onClick(Categories.DONE)}
-          name={Categories.DONE}
-        >
-          Done
-        </TodoBtn>
-      )}
-    </TodoList>
+      <CategorySelector value={category} onInput={onInput}>
+        {cateList.map(
+          (el) =>
+            el !== category && (
+              <option key={el} value={el}>
+                {el}
+              </option>
+            )
+        )}
+      </CategorySelector>
+    </Todo>
   );
 }
 
