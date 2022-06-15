@@ -21,6 +21,7 @@
     "typescript": "^4.7.3",
     "web-vitals": "^2.1.4"
   },
+  "hompage": "https://Palwol.github.io/react-todo/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -30,7 +31,6 @@
     "deploy": "gh-pages -d build",
     "predeploy": "npm run build"
   },
-  "hompage": "https://Palwol.github.io/react-todo",
   "eslintConfig": {
     "extends": [
       "react-app",
